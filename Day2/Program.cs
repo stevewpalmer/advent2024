@@ -22,6 +22,6 @@ Console.WriteLine($"Puzzle 2 answer : {totalSafe2}");
 return;
 
 bool IsSafe(List<int> series) {
-    List<int> diffs  = series.Zip(series.Skip(1), Tuple.Create).Select(p => p.Item1 - p.Item2).ToList();
-    return diffs.TrueForAll(d => d is >= 1 and <= 3) || diffs.TrueForAll(d => d is <= -1 and >= -3);
+    List<int> diffs  = series.Zip(series.Skip(1), (p1, p2) => p2 - p1).ToList();
+    return diffs.TrueForAll(d => Math.Abs(d) is >= 1 and <= 3 && Math.Sign(d) == Math.Sign(diffs[0]));
 }
