@@ -1,7 +1,7 @@
 ﻿int totalSafe1 = 0;
 int totalSafe2 = 0;
 
-foreach (string line in File.ReadLines("day2.txt")) {
+foreach (string line in File.ReadLines("puzzle.txt")) {
     List<int> series = line.Split(' ').Select(int.Parse).ToList();
     if (IsSafe(series)) {
         totalSafe1++;

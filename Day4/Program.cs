@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-char[][] grid = File.ReadLines("day4.txt").Select(line => line.ToCharArray()).ToArray();
+char[][] grid = File.ReadLines("puzzle.txt").Select(line => line.ToCharArray()).ToArray();
 Rectangle gridBounds = new Rectangle(0, 0, grid[0].Length, grid.Length);
 
 int countOfMatches1 = 0;

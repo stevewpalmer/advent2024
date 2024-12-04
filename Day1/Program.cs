@@ -1,7 +1,7 @@
 ﻿List<int> list1 = [];
 List<int> list2 = [];
 
-foreach (string line in File.ReadAllLines("day1.txt")) {
+foreach (string line in File.ReadAllLines("puzzle.txt")) {
     string[] parts = line.Split("  ");
     list1.Add(int.Parse(parts[0]));
     list2.Add(int.Parse(parts[1]));

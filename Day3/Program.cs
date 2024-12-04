@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-string input = File.ReadAllText("day3.txt");
+string input = File.ReadAllText("puzzle.txt");
 MatchCollection matches = Regex.Matches(input, @"mul\((\d+),(\d+)\)|do\(\)|don't\(\)");
 
 int answer1Total = 0;
