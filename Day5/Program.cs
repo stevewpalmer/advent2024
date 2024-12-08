@@ -19,5 +19,5 @@ while (++line < data.Length) {
         totalAnswer2 += sortedPages[Math.Abs(sortedPages.Length / 2)];
     }
 }
-Console.WriteLine($"Puzzle 1 answer : {totalAnswer1}");
-Console.WriteLine($"Puzzle 1 answer : {totalAnswer2}");
+Console.WriteLine($"Part 1 answer : {totalAnswer1}");
+Console.WriteLine($"Part 2 answer : {totalAnswer2}");

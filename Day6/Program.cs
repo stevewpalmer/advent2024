@@ -31,8 +31,8 @@ foreach (Point point in Walk1(guardStart, obstacles)) {
     answer1++;
 }
 
-Console.WriteLine($"Puzzle 1 answer : {answer1}");
-Console.WriteLine($"Puzzle 2 answer : {answer2}");
+Console.WriteLine($"Part 1 answer : {answer1}");
+Console.WriteLine($"Part 2 answer : {answer2}");
 return;
 
 HashSet<Point> Walk1(Point guard, HashSet<Point> grid) {

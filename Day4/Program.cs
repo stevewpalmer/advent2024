@@ -31,8 +31,8 @@ for (int y = 0; y < grid.Length; y++) {
     }
 }
 
-Console.WriteLine($"Puzzle 1 answer : {countOfMatches1}");
-Console.WriteLine($"Puzzle 2 answer : {countOfMatches2}");
+Console.WriteLine($"Part 1 answer : {countOfMatches1}");
+Console.WriteLine($"Part 2 answer : {countOfMatches2}");
 return;
 
 int Match(char[] matchString, int x, int y, int dx, int dy) {

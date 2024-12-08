@@ -17,8 +17,8 @@ foreach (string line in File.ReadLines("puzzle.txt")) {
     }
 }
 
-Console.WriteLine($"Puzzle 1 answer : {totalSafe1}");
-Console.WriteLine($"Puzzle 2 answer : {totalSafe2}");
+Console.WriteLine($"Part 1 answer : {totalSafe1}");
+Console.WriteLine($"Part 2 answer : {totalSafe2}");
 return;
 
 bool IsSafe(List<int> series) {

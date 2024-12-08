@@ -9,8 +9,8 @@ foreach (string line in File.ReadAllLines("puzzle.txt")) {
         answer2 += values[0];
     }
 }
-Console.WriteLine($"Puzzle 1 answer: {answer1}");
-Console.WriteLine($"Puzzle 2 answer: {answer2}");
+Console.WriteLine($"Part 1 answer: {answer1}");
+Console.WriteLine($"Part 2 answer: {answer2}");
 return;
 
 bool TrySolve(long total, List<long> values, bool concat) {

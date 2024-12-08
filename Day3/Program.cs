@@ -23,5 +23,5 @@ foreach (Match match in matches) {
     answer1Total += result;
 }
 
-Console.WriteLine($"Puzzle 1 answer : {answer1Total}");
-Console.WriteLine($"Puzzle 1 answer : {answer2Total}");
+Console.WriteLine($"Part 1 answer : {answer1Total}");
+Console.WriteLine($"Part 2 answer : {answer2Total}");

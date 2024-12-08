@@ -16,5 +16,5 @@ for (int i = 0; i < list1.Count; i++) {
     similarityScore += list1[i] * list2.Count(c => c == list1[i]);
 }
 
-Console.WriteLine($"Puzzle 1 answer : {sumDistance}");
-Console.WriteLine($"Puzzle 2 answer : {similarityScore}");
+Console.WriteLine($"Part 1 answer : {sumDistance}");
+Console.WriteLine($"Part 2 answer : {similarityScore}");
