@@ -14,30 +14,22 @@ HashSet<Point> antinodesPart1 = [];
 HashSet<Point> antinodesPart2 = [];
 
 foreach ((Point mp, char freq) in map) {
-    Point[] antennas = map.Where(p => p.Value == freq).Select(p => p.Key).ToArray();
-    foreach (Point antenna in antennas.Where(p => p != mp)) {
+    Point[] antennas = map.Where(p => p.Value == freq && p.Key != mp).Select(p => p.Key).ToArray();
+    foreach (Point antenna in antennas) {
         antinodesPart2.Add(antenna);
         antinodesPart2.Add(mp);
 
-        Point offset = new(antenna.X - mp.X, antenna.Y - mp.Y);
-        Point antinode = new(antenna.X + offset.X, antenna.Y + offset.Y);
+        Point offset1 = new(antenna.X - mp.X, antenna.Y - mp.Y);
+        Point offset2 = new(mp.X - antenna.X, mp.Y - antenna.Y);
 
-        if (bounds.Contains(antinode)) {
-            antinodesPart1.Add(antinode);
-            while (bounds.Contains(antinode)) {
-                antinodesPart2.Add(antinode);
-                antinode = new Point(antinode.X + offset.X, antinode.Y + offset.Y);
-            }
-        }
-
-        offset = new Point(mp.X - antenna.X, mp.Y - antenna.Y);
-        antinode = new Point(mp.X + offset.X, mp.Y + offset.Y);
-
-        if (bounds.Contains(antinode)) {
-            antinodesPart1.Add(antinode);
-            while (bounds.Contains(antinode)) {
-                antinodesPart2.Add(antinode);
-                antinode = new Point(antinode.X + offset.X, antinode.Y + offset.Y);
+        foreach ((Point p, Point o) in ((Point, Point)[])[(antenna, offset1), (mp, offset2)]) {
+            p.Offset(o);
+            if (bounds.Contains(p)) {
+                antinodesPart1.Add(p);
+                do {
+                    antinodesPart2.Add(p);
+                    p.Offset(o);
+                } while (bounds.Contains(p));
             }
         }
     }
