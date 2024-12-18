@@ -11,17 +11,18 @@ Point robot = new(-1, -1);
 
 string[] input = File.ReadAllLines("puzzle.txt");
 
-char[][] map = input.TakeWhile(l => !string.IsNullOrEmpty(l))
-    .Select(line => line.ToCharArray())
-    .ToArray();
-
 char[] route = string.Join("", input.SkipWhile(l => !string.IsNullOrEmpty(l))
         .Select(line => line))
     .ToCharArray();
 
-Console.WriteLine($"Part 1 answer: {Solve(map)}");
-Console.WriteLine($"Part 2 answer: {Solve(Resize(map))}");
+Console.WriteLine($"Part 1 answer: {Solve(GetMap())}");
+Console.WriteLine($"Part 2 answer: {Solve(Resize(GetMap()))}");
 return;
+
+char[][] GetMap() =>
+    input.TakeWhile(l => !string.IsNullOrEmpty(l))
+        .Select(line => line.ToCharArray())
+        .ToArray();
 
 char[][] Resize(char[][] map) {
     List<char[]> newMap = [];
@@ -43,75 +44,59 @@ char[][] Resize(char[][] map) {
 
 bool TryMove(char[][] map, Point pt, int dx, int dy) {
     pt.Offset(dx, dy);
-    char tr = map[pt.Y][pt.X];
-    if (tr == SPACE) {
-        return true;
-    }
-    if (tr == BOX) {
-        do {
-            pt.Offset(dx, dy);
-            tr = map[pt.Y][pt.X];
-        } while (tr == BOX);
-        return tr != WALL;
-    }
-    if (tr == WALL) {
-        return false;
-    }
-    if (dx == 0) {
-        if (tr == RIGHT) {
-            return TryMove(map, new Point(pt.X, pt.Y), dx, dy) && TryMove(map, new Point(pt.X - 1, pt.Y), dx, dy);
+    char tile = map[pt.Y][pt.X];
+    switch (tile) {
+        case SPACE:
+            return true;
+        case BOX: {
+            do {
+                pt.Offset(dx, dy);
+                tile = map[pt.Y][pt.X];
+            } while (tile == BOX);
+            return tile != WALL;
         }
-        if (tr == LEFT) {
-            return TryMove(map, new Point(pt.X, pt.Y), dx, dy) && TryMove(map, new Point(pt.X + 1, pt.Y), dx, dy);
-        }
+        case WALL:
+            return false;
+        case RIGHT when dx == 0:
+            return TryMove(map, new Point(pt.X, pt.Y), dx, dy) &&
+                   TryMove(map, new Point(pt.X - 1, pt.Y), dx, dy);
+        case LEFT when dx == 0:
+            return TryMove(map, new Point(pt.X, pt.Y), dx, dy) &&
+                   TryMove(map, new Point(pt.X + 1, pt.Y), dx, dy);
+        case RIGHT:
+        case LEFT:
+            return TryMove(map, new Point(pt.X + dx, pt.Y), dx, dy);
+        default:
+            return false;
     }
-    else if (dx == -1) {
-        if (tr == RIGHT) {
-            return TryMove(map, new Point(pt.X - 1, pt.Y), dx, dy);
-        }
-    }
-    else if (dx == 1) {
-        if (tr == LEFT) {
-            return TryMove(map, new Point(pt.X + 1, pt.Y), dx, dy);
-        }
-    }
-    return false;
 }
 
-void Move(char[][] map, Point pt, int dx, int dy) {
-    Point st = pt;
-    st.Offset(dx, dy);
-    char tr = map[st.Y][st.X];
-    if (tr == SPACE) {
-        (map[st.Y][st.X], map[pt.Y][pt.X]) = (map[pt.Y][pt.X], map[st.Y][st.X]);
-    }
-    else if (tr == BOX) {
-        Move(map, st, dx, dy);
-        (map[st.Y][st.X], map[pt.Y][pt.X]) = (map[pt.Y][pt.X], map[st.Y][st.X]);
-    }
-    else if (dx == 0) {
-        if (tr == RIGHT) {
-            Move(map, new Point(st.X, st.Y), dx, dy);
-            Move(map, new Point(st.X - 1, st.Y), dx, dy);
-            (map[st.Y][st.X], map[pt.Y][pt.X]) = (map[pt.Y][pt.X], map[st.Y][st.X]);
-        }
-        if (tr == LEFT) {
-            Move(map, new Point(st.X, st.Y), dx, dy);
-            Move(map, new Point(st.X + 1, st.Y), dx, dy);
-            (map[st.Y][st.X], map[pt.Y][pt.X]) = (map[pt.Y][pt.X], map[st.Y][st.X]);
-        }
-    }
-    else if (dx == -1) {
-        if (tr == RIGHT) {
-            Move(map, new Point(st.X - 1, st.Y), dx, dy);
-            (map[st.Y][st.X - 1], map[st.Y][st.X], map[pt.Y][pt.X]) = (map[st.Y][st.X], map[pt.Y][pt.X], map[st.Y][st.X - 1]);
-        }
-    }
-    else if (dx == 1) {
-        if (tr == LEFT) {
-            Move(map, new Point(st.X + 1, st.Y), dx, dy);
-            (map[st.Y][st.X + 1], map[st.Y][st.X], map[pt.Y][pt.X]) = (map[st.Y][st.X], map[pt.Y][pt.X], map[st.Y][st.X + 1]);
-        }
+void Move(char[][] map, Point cp, int dx, int dy) {
+    Point pt = cp;
+    pt.Offset(dx, dy);
+    char tile = map[pt.Y][pt.X];
+    switch (tile) {
+        case SPACE:
+            (map[pt.Y][pt.X], map[cp.Y][cp.X]) = (map[cp.Y][cp.X], map[pt.Y][pt.X]);
+            break;
+        case BOX:
+            Move(map, pt, dx, dy);
+            (map[pt.Y][pt.X], map[cp.Y][cp.X]) = (map[cp.Y][cp.X], map[pt.Y][pt.X]);
+            break;
+        case RIGHT when dx == 0:
+            Move(map, pt, dx, dy);
+            Move(map, new Point(pt.X - 1, pt.Y), dx, dy);
+            (map[pt.Y][pt.X], map[cp.Y][cp.X]) = (map[cp.Y][cp.X], map[pt.Y][pt.X]);
+            break;
+        case LEFT when dx == 0:
+            Move(map, pt, dx, dy);
+            Move(map, new Point(pt.X + 1, pt.Y), dx, dy);
+            (map[pt.Y][pt.X], map[cp.Y][cp.X]) = (map[cp.Y][cp.X], map[pt.Y][pt.X]);
+            break;
+        case RIGHT or LEFT:
+            Move(map, new Point(pt.X + dx, pt.Y), dx, dy);
+            (map[pt.Y][pt.X + dx], map[pt.Y][pt.X], map[cp.Y][cp.X]) = (map[pt.Y][pt.X], map[cp.Y][cp.X], map[pt.Y][pt.X + dx]);
+            break;
     }
 }
 
@@ -135,12 +120,10 @@ int Solve(char[][] map) {
     int sum = 0;
     for (int r = 0; r < map.Length; r++) {
         for (int c = 0; c < map[r].Length; c++) {
-            Console.Write(map[r][c]);
             if (map[r][c] == BOX || map[r][c] == LEFT) {
                 sum += 100 * r + c;
             }
         }
-        Console.WriteLine();
     }
     return sum;
 }
