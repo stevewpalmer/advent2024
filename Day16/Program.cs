@@ -33,7 +33,7 @@ int Walk() {
             continue;
         }
         if (pt == end) {
-            best = cost;
+            best = Math.Min(cost, best);
         }
         queue.Enqueue((pt, Mod(dt + 1, 4)), cost + 1000);
         queue.Enqueue((pt, Mod(dt - 1, 4)), cost + 1000);
