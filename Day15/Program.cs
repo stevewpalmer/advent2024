@@ -7,6 +7,9 @@ const char ROBOT = '@';
 const char LEFT = '[';
 const char RIGHT = ']';
 
+// Set this to 1 for fancy map draw during the solution.
+const bool DRAW_THE_MAP = true;
+
 Point robot = new(-1, -1);
 
 string[] input = File.ReadAllLines("puzzle.txt");
@@ -100,10 +103,33 @@ void Move(char[][] map, Point cp, int dx, int dy) {
     }
 }
 
+void DrawMap(char[][] map) {
+    Dictionary<int, int> colours = new() {
+        { ROBOT, 91 },
+        { LEFT, 97 },
+        { RIGHT, 97 },
+        { BOX, 97 },
+        { WALL, 93 },
+        { SPACE, 33 }
+    };
+    const string CSI = @"[";
+    Console.SetCursorPosition(0, 0);
+    Console.Write(@"[?25l");
+    foreach (char[] row in map) {
+        foreach (char tile in row) {
+            int colour = colours[tile];
+            Console.Write($"{CSI}{colour};40m{tile}{CSI}0m");
+        }
+        Console.WriteLine();
+    }
+    Console.Write(@"[?25h");
+}
+
 int Solve(char[][] map) {
     robot.Y = map.Select((item, index) => (item, index)).First(l => l.item.Contains(ROBOT)).index;
     robot.X = Array.FindIndex(map[robot.Y], c => c == ROBOT);
 
+    Console.Clear();
     foreach (char ch in route) {
         int dx = 0, dy = 0;
         switch (ch) {
@@ -111,6 +137,9 @@ int Solve(char[][] map) {
             case '>': dx = 1; break;
             case '^': dy = -1; break;
             case 'v': dy = 1; break;
+        }
+        if (DRAW_THE_MAP) {
+            DrawMap(map);
         }
         if (TryMove(map, robot, dx, dy)) {
             Move(map, robot, dx, dy);
