@@ -42,4 +42,4 @@ while (queue.TryDequeue(out var element, out int cost)) {
 }
 
 Console.WriteLine($"Part 1 answer: {best}");
-Console.WriteLine($"Part 2 answer: {paths.Count()}");
+Console.WriteLine($"Part 2 answer: {paths.Count}");
