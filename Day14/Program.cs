@@ -9,14 +9,14 @@ List<(Point p, Point v)> robots = File.ReadAllLines("puzzle.txt")
             .SelectMany(g => g.Captures
                 .Select(c => c.Value)))
         .Skip(1)
-        .Select(c => int.Parse(c))
+        .Select(int.Parse)
         .ToArray())
     .Select(values => (new Point(values[0], values[1]), new Point(values[2], values[3])))
     .ToList();
 
 int seconds = 0;
-int width = 101;
-int height = 103;
+const int width = 101;
+const int height = 103;
 
 while (seconds < 10402) {
     for (int i = 0; i < robots.Count; i++) {
@@ -33,10 +33,10 @@ while (seconds < 10402) {
     }
 
     factors.Add((++seconds,
-        robots.Count(r => r.p.X < width / 2 && r.p.Y < height / 2) *
-        robots.Count(r => r.p.X > width / 2 && r.p.Y < height / 2) *
-        robots.Count(r => r.p.X < width / 2 && r.p.Y > height / 2) *
-        robots.Count(r => r.p.X > width / 2 && r.p.Y > height / 2),
+        robots.Count(r => r.p is { X: < width / 2, Y: < height / 2 }) *
+        robots.Count(r => r.p is { X: > width / 2, Y: < height / 2 }) *
+        robots.Count(r => r.p is { X: < width / 2, Y: > height / 2 }) *
+        robots.Count(r => r.p is { X: > width / 2, Y: > height / 2 }),
         robots.Select(r => r.p).ToList()));
 }
 

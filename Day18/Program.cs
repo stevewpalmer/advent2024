@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 
-int width = 71;
-int height = 71;
+const int width = 71;
+const int height = 71;
 
 string[] input = File.ReadAllLines("puzzle.txt");
 char[,] maze = new char[height, width];
@@ -48,7 +48,7 @@ int Walk() {
         }
         foreach ((int dx, int dy) in directions) {
             Point step = new(pt.X + dx, pt.Y + dy);
-            if (step is { Y: >= 0, X: >= 0 } && step.Y < height && step.X < width && maze[step.Y, step.X] != '#') {
+            if (step is { Y: >= 0 and < height, X: >= 0 and < width } && maze[step.Y, step.X] != '#') {
                 queue.Enqueue((step, cost + 1), cost + 1);
             }
         }
