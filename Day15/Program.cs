@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿//#define DRAW_THE_MAP
+
+using System.Drawing;
 
 const char WALL = '#';
 const char BOX = 'O';
@@ -6,9 +8,6 @@ const char SPACE = '.';
 const char ROBOT = '@';
 const char LEFT = '[';
 const char RIGHT = ']';
-
-// Set this to 1 for fancy map draw during the solution.
-const bool DRAW_THE_MAP = true;
 
 Point robot = new(-1, -1);
 
@@ -103,6 +102,7 @@ void Move(char[][] map, Point cp, int dx, int dy) {
     }
 }
 
+#if DRAW_THE_MAP
 void DrawMap(char[][] map) {
     Dictionary<int, int> colours = new() {
         { ROBOT, 91 },
@@ -124,12 +124,12 @@ void DrawMap(char[][] map) {
     }
     Console.Write(@"[?25h");
 }
+#endif
 
 int Solve(char[][] map) {
     robot.Y = map.Select((item, index) => (item, index)).First(l => l.item.Contains(ROBOT)).index;
     robot.X = Array.FindIndex(map[robot.Y], c => c == ROBOT);
 
-    Console.Clear();
     foreach (char ch in route) {
         int dx = 0, dy = 0;
         switch (ch) {
@@ -138,9 +138,9 @@ int Solve(char[][] map) {
             case '^': dy = -1; break;
             case 'v': dy = 1; break;
         }
-        if (DRAW_THE_MAP) {
-            DrawMap(map);
-        }
+        #if DRAW_THE_MAP
+        DrawMap(map);
+        #endif
         if (TryMove(map, robot, dx, dy)) {
             Move(map, robot, dx, dy);
             robot.Offset(dx, dy);

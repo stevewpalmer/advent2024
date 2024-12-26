@@ -1,4 +1,6 @@
-﻿long regA = 0;
+﻿//#define DISASSEMBLE_PROGRAM
+
+long regA = 0;
 long regB = 0;
 long regC = 0;
 List<int> data = [];
@@ -13,7 +15,9 @@ foreach (string input in File.ReadLines("puzzle.txt")) {
     }
 }
 
+#if DISASSEMBLE_PROGRAM
 Disassemble(data);
+#endif
 
 string answer1 = string.Join(",", Run(regA, regB, regC));
 long answer2 = Solve(0, 0);
@@ -22,6 +26,7 @@ Console.WriteLine($"Part 1 answer: {answer1}");
 Console.WriteLine($"Part 2 answer: {answer2}");
 return;
 
+#if DISASSEMBLE_PROGRAM
 void Disassemble(List<int> program) {
     for (int pc = 0; pc < program.Count;) {
         int opcode = program[pc];
@@ -41,6 +46,7 @@ void Disassemble(List<int> program) {
         pc += 2;
     }
 }
+#endif
 
 long Solve(long a, int depth) {
     if (depth == data.Count) {

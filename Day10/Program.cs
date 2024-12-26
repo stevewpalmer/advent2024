@@ -15,8 +15,8 @@ for (int y = 0; y < h; y++) {
     }
 }
 
-Console.WriteLine($"Part 1: {answer1}");
-Console.WriteLine($"Part 2: {answer2}");
+Console.WriteLine($"Part 1 answer: {answer1}");
+Console.WriteLine($"Part 2 answer: {answer2}");
 return;
 
 int Walk(int x, int y, int part) {
